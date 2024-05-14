@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.todotasks.BuildConfig
 import com.example.todotasks.R
 import com.example.todotasks.presentation.navigation.destination.destination
 import com.example.todotasks.ui.theme.PrimaryColor
@@ -146,7 +147,7 @@ fun  SignUpScreen(navController: NavHostController, authViewModel: AuthViewModel
                 )
             )
             Spacer(modifier= Modifier.height(15.dp))
-            Button(onClick = { /*TODO*/ },
+            Button(onClick = { authViewModel.signUp(textState.value["email"]!!,textState.value["password"]!!) },
                 Modifier
                     .fillMaxWidth(.8f)
                     .height(
@@ -178,18 +179,19 @@ fun  SignUpScreen(navController: NavHostController, authViewModel: AuthViewModel
 }
 @Composable
 fun SignInWithGoogle(authViewModel: AuthViewModel) {
-    val token="609482402985-n90ovl64ma8rdlraqgj8f5q9cahin7fh.apps.googleusercontent.com"
+    val token= BuildConfig.GOOGlE_TOKEN
+
     var user by remember {
         mutableStateOf(Firebase.auth.currentUser)
     }
     val launcher = rememberFirebaseAuthLauncher(
         oAuthComplete = { result ->
             user =result.user
-            authViewModel.isSigned.value=destination.MainScreens.title
+//            authViewModel.isSigned.value=destination.MainScreens.title
         },
         onAuthError = {
             user=null
-            authViewModel.isSigned.value=destination.AuthScreens.title
+//            authViewModel.isSigned.value=destination.AuthScreens.title
             println(it.message)
 
         })
@@ -199,7 +201,7 @@ fun SignInWithGoogle(authViewModel: AuthViewModel) {
 
         if (user ==null){
 //            Text(text = "not logged in ")
-            authViewModel.isSigned.value=destination.AuthScreens.title
+//            authViewModel.isSigned.value=destination.AuthScreens.title
             Button(onClick = {
                 val gso= GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(token)
@@ -222,25 +224,25 @@ fun SignInWithGoogle(authViewModel: AuthViewModel) {
             }
         }else{
 //            navController.navigate(destination.MainScreens.HomeRoute.title)
-            authViewModel.isSigned.value=destination.MainScreens.title
-            Text(text = "Welcome ${user!!.displayName}")
-            AsyncImage(model = user!!.photoUrl, contentDescription =null ,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(40.dp)
-            )
-            Button(onClick = {
-                Firebase.auth.signOut()
-                user=null
-            }) {
-                Text(text = "Sign Out")
-            }
-            Button(onClick = {
-//                navController.navigate(destination.MainScreens.HomeRoute.title)
-                user=null
-            }) {
-                Text(text = "Sign")
-            }
+//            authViewModel.isSigned.value=destination.MainScreens.title
+//            Text(text = "Welcome ${user!!.displayName}")
+//            AsyncImage(model = user!!.photoUrl, contentDescription =null ,
+//                modifier = Modifier
+//                    .clip(CircleShape)
+//                    .size(40.dp)
+//            )
+//            Button(onClick = {
+//                Firebase.auth.signOut()
+//                user=null
+//            }) {
+//                Text(text = "Sign Out")
+//            }
+//            Button(onClick = {
+////                navController.navigate(destination.MainScreens.HomeRoute.title)
+//                user=null
+//            }) {
+//                Text(text = "Sign")
+//            }
         }
 
     }

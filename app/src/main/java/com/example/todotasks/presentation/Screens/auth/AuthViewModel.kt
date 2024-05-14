@@ -1,8 +1,11 @@
 package com.example.todotasks.presentation.Screens.auth
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.todotasks.presentation.navigation.destination.destination
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +23,17 @@ class AuthViewModel @Inject constructor() :ViewModel() {
         }else{
             mutableStateOf(destination.MainScreens.title)
         }
-
+    init {
+        auth.apply {
+            this.addAuthStateListener {
+                isSigned.value = if (currentUser == null){
+                    destination.AuthScreens.title
+                }else{
+                    destination.MainScreens.title
+                }
+            }
+        }
+    }
     val error = mutableStateOf("")
 
     fun login(email: String, password: String){
@@ -33,16 +46,20 @@ class AuthViewModel @Inject constructor() :ViewModel() {
                 }
             }
     }
-    fun  logOut(){
+    fun  logOut(context: Context){
         auth.signOut()
-        isSigned.value = destination.AuthScreens.title
+        GoogleSignIn.getClient(
+            context,
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()).signOut()
+
+//        isSigned.value = destination.AuthScreens.title
     }
     fun signUp(email: String, password: String){
         auth.createUserWithEmailAndPassword(email, password)
 
             .addOnCompleteListener{
                 if (it.isSuccessful){
-                    isSigned.value = destination.MainScreens.title
+//                    isSigned.value = destination.MainScreens.title
                 }else{
 
                     error.value = it.exception?.message.orEmpty()

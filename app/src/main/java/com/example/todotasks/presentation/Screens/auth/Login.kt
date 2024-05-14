@@ -54,8 +54,6 @@ fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) 
                 )
             }
 
-
-
             TextField(
                 value = textState.value["email"] ?: "",
                 onValueChange = { newText ->
@@ -101,7 +99,7 @@ fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) 
 
             }
             Spacer(modifier= Modifier.height(15.dp))
-            Button(onClick = { /*TODO*/ },
+            Button(onClick = {authViewModel.login(textState.value["email"] ?: "", textState.value["password"] ?: "")},
                 Modifier
                     .fillMaxWidth(.8f)
                     .height(

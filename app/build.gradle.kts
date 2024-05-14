@@ -22,6 +22,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        val GOOGLE_TOKEN = properties["GOOGLE_TOKEN"]
+        buildConfigField("String", "GOOGlE_TOKEN", "\"$GOOGLE_TOKEN\"")
+
     }
 
     buildTypes {
@@ -51,6 +54,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    android.buildFeatures.buildConfig = true
 }
 
 dependencies {

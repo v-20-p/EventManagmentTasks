@@ -37,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -58,15 +59,16 @@ import com.example.todotasks.ui.theme.PrimaryColor
 
 
 
+
 @Composable
 fun EventAppNavigation(authViewModel: AuthViewModel, navController: NavHostController) {
-
+    val context = LocalContext.current
     NavHost(navController = navController,
         startDestination = authViewModel.isSigned.value){
         authNavigation(navController,authViewModel)
 
         mainNavigation(navController,authViewModel){
-            authViewModel.logOut()
+            authViewModel.logOut(context)
         }
     }
 
@@ -99,8 +101,10 @@ fun NavGraphBuilder.mainNavigation(navController: NavHostController,
             HomeScreen(navController)
         }
         composable(route = destination.MainScreens.TaskRoute.title) {
-            TaskScreen(navController)
+//            TaskScreen()
+Column {
 
+}
         }
         composable(route = destination.MainScreens.GraphicRoute.title) {
             //GraphicScreen(navController)
@@ -217,7 +221,6 @@ fun TabView(tabBarItems: List<destination>, navController: NavHostController) {
                         indicatorColor = Color.White
                     ),
                     modifier = Modifier.padding(top = 20.dp)
-
                 )
                 if (index == 1) {
                     Icon(
